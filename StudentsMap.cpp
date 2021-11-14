@@ -1,20 +1,46 @@
-// StudentsMap.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include <iostream>
+#include <map>
+
+struct StudentInfo
+{
+	StudentInfo(std::string firstName, std::string lastName, int averageScore) :
+		m_firstName(firstName),
+		m_lastName(lastName),
+		m_averageScore(averageScore)
+	{
+
+	}
+
+	std::string m_firstName;
+	std::string m_lastName;
+	int m_averageScore;
+};
 
 int main()
 {
-    std::cout << "Hello World!\n";
+	std::map<int, StudentInfo> students;
+	StudentInfo roman("Roman", "Sotnikow", 100);
+	StudentInfo alexey("Alexey", "Myheenko", 80);
+	StudentInfo michael("Michael", "Litvinovich", 90);
+	StudentInfo daniel("Daniel", "Yan", 85);
+	students.emplace(1, roman);
+	students.emplace(2, alexey);
+	students.emplace(3, michael);
+	students.emplace(4, daniel);
+	for (auto it = students.cbegin(); it != students.cend(); std::advance(it, 1))
+	{
+		std::cout << it->first << " " << it->second.m_firstName << " " << it->second.m_lastName << " " << it->second.m_averageScore << std::endl;
+	}
+	auto result = find_if(students.cbegin(), students.cend(), [](const std::pair<const int, StudentInfo>& info)
+		{
+			return info.second.m_averageScore == 100;
+		});
+	if (result == students.end())
+	{
+		std::cout << "Student not found" << std::endl;
+	}
+	else
+	{
+		std::cout << "Student's name is " << result->second.m_firstName << " " << result->second.m_lastName << std::endl;
+	}
 }
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
